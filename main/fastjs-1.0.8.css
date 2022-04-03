@@ -1,0 +1,222 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+a {
+    text-decoration-line: none;
+}
+
+a:hover {
+    text-decoration-line: none;
+}
+
+fastjs-carousel {
+    display: block;
+    user-select: none;
+    opacity: 1.0;
+    cursor: default;
+}
+
+fastjs-carousel div[show=show] {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 1.0;
+    transition: 1s;
+    background: white none no-repeat content-box center center;
+}
+
+fastjs-carousel div[show=hide] {
+    width: 100%;
+    height: 100%;
+    display: none;
+    opacity: 0;
+    transition: 1s;
+    background: white none no-repeat content-box center center;
+}
+
+*[bg-color=red] {
+    background-color: #ff3f3f;
+}
+
+*[bg-color=orange] {
+    background-color: #ff8c00;
+}
+
+*[bg-color=green] {
+    background-color: #2fff00;
+}
+
+*[bg-color=gray] {
+    background-color: #6d6d6d;
+}
+
+*[bg-color=black] {
+    background-color: black;
+}
+
+*[bg-color=blue] {
+    background-color: deepskyblue;
+}
+
+*[color=red] {
+    color: #ff3f3f;
+}
+
+*[color=orange] {
+    color: #ff8c00;
+}
+
+*[color=green] {
+    color: #0fa597;
+}
+
+*[color=gray] {
+    color: #6d6d6d;
+}
+
+*[color=black] {
+    color: black;
+}
+
+*[color=blue] {
+    color: deepskyblue;
+}
+
+
+button.fastjs-btn {
+    cursor: pointer;
+    height: 38px;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0 16px;
+    margin: 4px;
+    width: auto;
+    background-color: #0fa597;
+    transition: 0.4s;
+}
+
+button[class~=fastjs-btn]:hover {
+    opacity: 0.6;
+}
+
+button[class~=fastjs-btn][color=red] {
+    background-color: #ff3f3f;
+}
+
+button[class~=fastjs-btn][color=orange] {
+    background-color: #ff8c00;
+}
+
+button[class~=fastjs-btn][color=green] {
+    background-color: #0fa597;
+}
+
+button[class~=fastjs-btn][color=gray] {
+    background-color: #6d6d6d;
+}
+
+button[class~=fastjs-btn][color=black] {
+    background-color: black;
+}
+
+button[class~=fastjs-btn][color=blue] {
+    background-color: deepskyblue;
+}
+
+button[class~=fastjs-btn][class~=white-background] {
+    color: #0fa597;
+    border: 1px solid #0fa597;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=red][class~=white-background] {
+    color: #ff3f3f;
+    border: 1px solid #ff3f3f;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=orange][class~=white-background] {
+    color: #ff8c00;
+    border: 1px solid #ff8c00;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=green][class~=white-background] {
+    color: #0fa597;
+    border: 1px solid #0fa597;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=gray][class~=white-background] {
+    color: #6d6d6d;
+    border: 1px solid #6d6d6d;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=black][class~=white-background] {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
+}
+
+button[class~=fastjs-btn][color=blue][class~=white-background] {
+    color: deepskyblue;
+    border: 1px solid deepskyblue;
+    background-color: white;
+}
+
+
+button[class~=fastjs-btn-white] {
+    cursor: pointer;
+    height: 38px;
+    border: 1px solid rgba(0, 0, 0, 0.54);
+    border-radius: 2px;
+    color: #333;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0 16px;
+    margin: 4px;
+    width: auto;
+    background-color: white;
+    transition: 0.4s;
+}
+button[class~=fastjs-btn-white]:hover {
+    opacity: 0.6;
+}
+
+button[class~=fastjs-btn-readonly] {
+    cursor: not-allowed;
+    height: 38px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    color: #d2d2d2;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0 16px;
+    margin: 4px;
+    width: auto;
+    background-color: #FBFBFB;
+}
