@@ -2,7 +2,7 @@
 * Fastjs Javascript Frame
 *
 * About this frame:
-*   Version:v1.0.8
+*   Version:v1.0.7
 *   Date:2022-03-05
 *   Author:XiaoDong Team-XiaoDong (xiaodong@indouyin.cn)
 *   Contact-Us: xiaodong@indouyin.cn
@@ -228,10 +228,20 @@ class ajax {
         }
         this.xhr.timeout = this.timeout;
 
+        this.xhr.sendTimeout = setTimeout(()=>{
+            if (fastjs_config["log"]["ajaxLog"]) {
+                console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
+            }
+            if (this.callback && typeof this.callback == "function") {
+                this.callback("!failed", this.xhr.readyState)
+            }
+            this.result = "!failed";
+        }, this.xhr.timeout)
+
         this.xhr.open("post", this.url);
         this.xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-        this.xhr.onreadystatechange = () => {
+        this.xhr.onload = () => {
             let response = this.xhr.response;
             if (this.datatype === "auto") {
                 try {
@@ -305,7 +315,18 @@ class ajax {
         this.xhr.open("get", url);
         this.xhr.timeout = this.timeout;
 
-        this.xhr.onreadystatechange = () => {
+        this.xhr.sendTimeout = setTimeout(()=>{
+            if (fastjs_config["log"]["ajaxLog"]) {
+                console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
+            }
+            if (this.callback && typeof this.callback == "function") {
+                this.callback("!failed", this.xhr.readyState)
+            }
+            this.result = "!failed";
+        }, this.xhr.timeout)
+
+        this.xhr.onload = () => {
+            clearTimeout(this.xhr.sendTimeout)
             if (this.xhr.status === 200) {
                 let response = this.xhr.response;
                 if (this.datatype === "auto") {
