@@ -2,7 +2,7 @@
 * Fastjs Javascript Frame
 *
 * About this frame:
-*   Version:v1.0.7
+*   Version:v1.0.8
 *   Date:2022-03-05
 *   Author:XiaoDong Team-XiaoDong (xiaodong@indouyin.cn)
 *   Contact-Us: xiaodong@indouyin.cn
