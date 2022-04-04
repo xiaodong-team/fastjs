@@ -9,13 +9,7 @@
 *   Follow-Us: https://leetcode-cn.com/u/dy_xiaodong/
 *
 * Frame license:
-*   (1) Developer need to use the framework with the consent of the author.
-*   (2) Developer can't commercial,modify before you get the consent of the author
-*   (3) After developer get the consent of the author,developer can use,copy,download,commercial,modify this frame.
-*   (4) If developer use this frame,developer need to show the integral copyright in source code and need to have a copyright notice.
-*   (5) Developer can modify this frame,but need to show the details in the source code and copyright notice.
-*   (6) Developer can use this frame in a commercial activity,but also need to comply with license no(4) and no(5).
-*   (7) If developer sell to other one without modifying the source code,developer need to pay 20% profit to author(XiaoDong Team).
+*   GNU Affero General Public License v3.0 (AGPL 3.0)
 */
 
 
@@ -49,13 +43,17 @@ class app {
             $dom = $dom.querySelectorAll("*[fastjs-appname=\"%s\"]".replace("%s", appname))[0]
             config = Object.entries(config)
             fastjs.foreach(config, "as data", ()=>{
+                // noinspection JSUnresolvedVariable
                 if (typeof data[1] == "object"){
+                    // noinspection JSUnresolvedVariable
                     data[1] = Object.entries(data[1]);
+                    // noinspection JSUnresolvedVariable
                     fastjs.foreach(data[1], "as datadata", ()=>{
                         // noinspection JSUnresolvedVariable
                         $dom[data[0]][datadata[0]] = datadata[1];
                     })
                 } else {
+                    // noinspection JSUnresolvedVariable
                     $dom[data[0]] = data[1]
                 }
             })
