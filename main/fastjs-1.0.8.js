@@ -9,7 +9,7 @@
 *   Follow-Us: https://leetcode-cn.com/u/dy_xiaodong/
 *
 * Frame license:
-*   GNU Affero General Public License v3.0 (AGPL 3.0)
+*   MIT License
 */
 
 
@@ -57,6 +57,7 @@ class app {
                     $dom[data[0]] = data[1]
                 }
             })
+            $dom.attr("type", "fastjs-app")
             // noinspection JSUnresolvedFunction
             if (this.config.setup) {
                 // noinspection JSUnresolvedFunction
