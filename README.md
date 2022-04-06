@@ -42,5 +42,5 @@ git clone "https://gitee.com/dy-xiaodong/fastjs.git"
 
 ### 关于我们
 作者名: DY_XiaoDong <br />
-开源协议: GNU Affero General Public License v3.0 <br />
+开源协议: MIT License <br />
 项目官网: https://fastjs.com.cn/
