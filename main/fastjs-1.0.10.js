@@ -2,11 +2,12 @@
 * Fastjs Javascript Frame
 *
 * About this frame:
-*   Version:v1.0.9
-*   Date:2022-03-05
+*   Version:v1.0.10
+*   Date:2022-05-15
 *   Author:XiaoDong Team-XiaoDong (xiaodong@indouyin.cn)
 *   Contact-Us: xiaodong@indouyin.cn
 *   Follow-Us: https://leetcode-cn.com/u/dy_xiaodong/
+*              https://juejin.cn/user/3540872450829720/
 *
 * Frame license:
 *   MIT License
@@ -14,7 +15,7 @@
 
 
 const fastjs_config = {
-    "version": "1.0.9",
+    "version": "1.0.10",
     "autoInstallCss": true,
     "error": {
         "smallErrorOutput": true,
@@ -372,10 +373,25 @@ class fastjs {
             return fastjs.attr($name, $value, this);
         }
         Element.prototype.event_click = function ($event) {
-            return fastjs.onclick($event, this);
+            return fastjs.on($event, this, "onclick");
         }
         Element.prototype.event_blur = function ($event) {
-            return fastjs.onblur($event, this);
+            return fastjs.on($event, this, "onblur");
+        }
+        Element.prototype.event_focus = function ($event) {
+            return fastjs.on($event, this, "onfocus");
+        }
+        Element.prototype.event_change = function ($event) {
+            return fastjs.on($event, this, "onchange");
+        }
+        Element.prototype.event_input = function ($event) {
+            return fastjs.on($event, this, "oninput");
+        }
+        Element.prototype.event_keyup = function ($event) {
+            return fastjs.on($event, this, "onkeyup");
+        }
+        Element.prototype.event_keydown = function ($event) {
+            return fastjs.on($event, this, "onkeydown");
         }
         Element.prototype.domAddEnd = function ($domadd) {
             return fastjs.domAddEnd($domadd, this);
@@ -392,6 +408,36 @@ class fastjs {
         Element.prototype.gettext = function () {
             return this.innerText;
         }
+        Array.prototype.add = function ($index, $key) {
+            if (!$key && $key !== 0) {
+                this.push($index)
+            } else {
+                if (this.length - 1 > $key) {
+                    throw "[Fastjs] Fastjs.array.add.crashError: key is out of range"
+                } else if ($key < 0) {
+                    throw "[Fastjs] Fastjs.array.add.crashError: key is out of range"
+                }
+            }
+            this.splice($key, 0, $index)
+            return true;
+        }
+        Array.prototype.delete = function ($key, $num) {
+            if (!$num) {
+                if ($num === 0) {
+                    fastjs.throwSmallError("[Fastjs code review] Method calls that could have been ignored: when $num == 0, you don't need to use function delete()")
+                    return false;
+                }
+                $num = 1;
+            }
+            this.splice($key, $num)
+            return true;
+        }
+        Array.prototype.resort = function () {
+            this.sort()
+            this.reverse()
+            return true;
+        }
+        Array.prototype.sort()
         window.$ = function dom($selecter) {
             return fastjs.dom($selecter);
         }
@@ -674,7 +720,7 @@ class fastjs {
 
         let selecter = [];
         let string = [];
-        for (let i = 0;i < $selecter.length;i++) {
+        for (let i = 0; i < $selecter.length; i++) {
             string.push($selecter[i]);
         }
         let selecting = false
@@ -713,7 +759,7 @@ class fastjs {
         let result = null
         selecter.forEach((e, key) => {
             if (e.type === "tag") {
-                e.slice(1);
+                e.index = e.index.slice(1);
             }
             if (key !== selecter.length - 1) {
                 if (!key) {
@@ -740,7 +786,7 @@ class fastjs {
         return result
     }
 
-    static onclick($event, $dom) {
+    static on($event, $dom, $name) {
         /*
          * How To Use?
          *
@@ -757,12 +803,12 @@ class fastjs {
          * exp: $("body").event_click(["console.log('h')",()=>{console.log("i")},"console.log('!')"])
          */
         if (typeof $event == "function") {
-            $dom.onclick = () => {
+            $dom[$name] = () => {
                 // lambada to keep functionly
                 $event();
             }
         } else if (typeof $event == "string") {
-            $dom.onclick = () => {
+            $dom[$name] = () => {
                 // lambada to keep functionly
                 eval($event);
             }
@@ -773,7 +819,7 @@ class fastjs {
             if ($event === "" || $event.length === 0) {
                 return false;
             }
-            $dom.onclick = () => {
+            $dom[$name] = () => {
                 this.foreach($event, "as $function", () => {
                     if (typeof $function == "function") {
                         // noinspection JSUnresolvedFunction
@@ -786,55 +832,6 @@ class fastjs {
         }
         return true;
     }
-
-    static onblur($event, $dom) {
-        /*
-         * How To Use?
-         *
-         * 1.onblur->event: The querySelector, very same with css selector
-         *        exp: ".className"
-         *        exp: "#id"
-         *        exp: ".className[type=button]"
-         *        exp: "body"
-         *        exp: "div"
-         * 2.onblur->dom: You DO NOT NEED to give this parameter.
-         *
-         * exp: fastjs.dom("body").event_blur("console.log('Hello World!')")
-         * exp: js.dom("body").event_blur(()=>{console.log(1+1))})
-         * exp: $("body").event_blur(["console.log('h')",()=>{console.log("i")},"console.log('!')"])
-         */
-
-        if (typeof $event == "function") {
-            $dom.onblur = () => {
-                // lambada to keep functionly
-                $event();
-            }
-        } else if (typeof $event == "string") {
-            $dom.onblur = () => {
-                // lambada to keep functionly
-                eval($event);
-            }
-        } else {
-            if (!$event) {
-                return false;
-            }
-            if ($event === "" || $event.length === 0) {
-                return false;
-            }
-            $dom.onblur = () => {
-                this.foreach($event, "as $function", () => {
-                    if (typeof $function == "function") {
-                        // noinspection JSUnresolvedFunction
-                        $function()
-                    } else {
-                        eval($function)
-                    }
-                })
-            }
-        }
-        return true;
-    }
-
 
     static attr($name, $value, $dom) {
         /*
@@ -1154,7 +1151,6 @@ class fastjs {
         *
         * exp: <a href="javascript:void(0);" onclick="fastjs.copy('12345')">Click to copy</a>
             * exp: <a href="javascript:fastjs.copy('abcde')">Click to copy</a>
-        *
         */
 
         var oInput = document.createElement('input');
@@ -1365,6 +1361,15 @@ class fastjs {
     }
 
     static getcookie(cookie) {
+        /*
+        * How To Use?
+        *
+        * 1.getcookie->cookie: The cookie name need to get.
+        *
+        * exp: fastjs.getcookie("userid")
+        * exp: getcookie("loginid")
+        */
+
         var name = cookie + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -1375,6 +1380,15 @@ class fastjs {
     }
 
     static setcookie(name, value, sec, domain) {
+        /*
+        * How To Use?
+        *
+        * 1.getcookie->name: The cookie name.
+        * 2.getcookie->value: The value of cookie.
+        * 3.getcookie->sec: The time cookie expire(second).
+        * 4.getcookie->domain: The domain cookie saved.
+        */
+
         let d = new Date();
         d.setTime(d.getTime() + (sec * 1000));
         if (domain !== "") {
