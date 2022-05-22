@@ -1,9 +1,10 @@
+// noinspection JSUnresolvedFunction
+
 /*
 * Fastjs Javascript Frame
 *
 * About this frame:
-*   Version:v1.0.10
-*   Date:2022-05-15
+*   Version:v1.0.11
 *   Author:XiaoDong Team-XiaoDong (xiaodong@indouyin.cn)
 *   Contact-Us: xiaodong@indouyin.cn
 *   Follow-Us: https://leetcode-cn.com/u/dy_xiaodong/
@@ -13,19 +14,34 @@
 *   MIT License
 */
 
-
-const fastjs_config = {
-    "version": "1.0.10",
-    "autoInstallCss": true,
+const FASTJS_CONFIG = {
+    "version": "1.0.11",
+    "newVersionCheck": true,
+    "css": {
+        "autoInstall": true,
+        "url": "default"
+    },
     "error": {
-        "smallErrorOutput": true,
-        "errorOutput": true,
-        "seriousErrorOutput": true,
-        "crashErrorOutput": "always on"
+        "output": {
+            "smallErrorOutput": true,
+            "errorOutput": true,
+            "seriousErrorOutput": true,
+            "crashErrorOutput": "always on"
+        },
+        "ajax": {
+            "urlNotSecurity": true,
+            "checkTimeout": true
+        },
+        "other": {
+            "outOfRange": true
+        }
     },
     "log": {
         "fastjsInstallLog": true,
         "ajaxLog": true
+    },
+    "compiler": {
+        "qualityInspection": true
     }
 }
 
@@ -36,7 +52,8 @@ class app {
         return this;
     }
 
-    push($dom) {
+    push(selecter) {
+        let $dom = document.querySelector(selecter)
         let appname = this.appname;
         let config = this.config;
         if ($dom.gethtml().search("{{ %s }}".replace("%s", appname)) !== -1) {
@@ -82,7 +99,9 @@ class app {
  *              exp: .class
  *              exp: .class class2
  *
- * exp: let dom = new dom("div", ".text")
+ * exp: let $dom = new dom("div", ".text")
+ *      $("body").domAddEnd(dom)
+ * exp: let $dom = new dom("div", "#id")
  *      $("body").domAddEnd(dom)
  */
 
@@ -139,6 +158,13 @@ class dom {
  *           console.log($status)
  *      }
  *      $ajax.get()
+ * exp: $ajax = new ajax()
+ *      $ajax.url = "login.php"
+ *      $ajax.data = [["username","admin"],["password","12345"]]
+ *      $ajax.callback = result =>{
+ *           console.log(result)
+ *      }
+ *      $ajax.post()
  */
 
 // noinspection JSUnresolvedVariable
@@ -161,14 +187,16 @@ class ajax {
         if (this.timeout == null) {
             this.timeout = 5000;
         } else if (typeof timeout == "number") {
-            if (100 < timeout && timeout <= 1000) {
-                fastjs.throwSmallError("[Fastjs] SmallError at ajax: timeout is a little bit small, it maybe will make a bad experience")
-            } else if (0 < timeout && timeout <= 100) {
-                fastjs.throwError("[Fastjs] Error at ajax: timeout is too small, it will make a bad experience!")
-            } else if (timeout === 0) {
-                fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: timeout is too small, it will let ajax can't run!")
+            if (FASTJS_CONFIG.error.ajax.checkTimeout) {
+                if (100 < this.timeout && this.timeout <= 1000) {
+                    fastjs.throwSmallError("[Fastjs] SmallError at ajax: this.timeout is a little bit small, it maybe will make a bad experience")
+                } else if (0 < this.timeout && this.timeout <= 100) {
+                    fastjs.throwError("[Fastjs] Error at ajax: this.timeout is too small, it will make a bad experience!")
+                } else if (this.timeout === 0) {
+                    fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: this.timeout is too small, it will let ajax can't run!")
+                    this.timeout = 1;
+                }
             }
-
             this.timeout = timeout
         } else {
             fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: Unknown timeout given")
@@ -188,25 +216,30 @@ class ajax {
         }
     }
 
+    // noinspection HttpUrlsUsage
     post() {
         if (this.timeout == null) {
             this.timeout = 5000;
         } else if (typeof this.timeout == "number") {
-            if (100 < this.timeout && this.timeout <= 1000) {
-                fastjs.throwSmallError("[Fastjs] SmallError at ajax: this.timeout is a little bit small, it maybe will make a bad experience")
-            } else if (0 < this.timeout && this.timeout <= 100) {
-                fastjs.throwError("[Fastjs] Error at ajax: this.timeout is too small, it will make a bad experience!")
-            } else if (this.timeout === 0) {
-                fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: this.timeout is too small, it will let ajax can't run!")
-                this.timeout = 1;
+            if (FASTJS_CONFIG.error.ajax.checkTimeout) {
+                if (100 < this.timeout && this.timeout <= 1000) {
+                    fastjs.throwSmallError("[Fastjs] SmallError at ajax: this.timeout is a little bit small, it maybe will make a bad experience")
+                } else if (0 < this.timeout && this.timeout <= 100) {
+                    fastjs.throwError("[Fastjs] Error at ajax: this.timeout is too small, it will make a bad experience!")
+                } else if (this.timeout === 0) {
+                    fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: this.timeout is too small, it will let ajax can't run!")
+                    this.timeout = 1;
+                }
             }
         }
 
+        // FASTJS-ERROR
         if (!this.url || this.url.length < 1) {
-            throw "[Fastjs] Fastjs.ajax.error: 9412E"
+            throw "[Fastjs] CrashError at ajax: Null data given"
         }
 
-        if (this.url.search("https://") === -1) {
+        // FASTJS-ERROR :: urlNotSecurity
+        if (this.url.search("http://") !== -1) {
             fastjs.throwSmallError("[Fastjs] SmallError at ajax: The url given is not secure")
         }
 
@@ -229,7 +262,7 @@ class ajax {
         this.xhr.timeout = this.timeout;
 
         this.xhr.sendTimeout = setTimeout(() => {
-            if (fastjs_config["log"]["ajaxLog"]) {
+            if (FASTJS_CONFIG.log.ajaxLog) {
                 console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
             }
             if (this.callback && typeof this.callback == "function") {
@@ -252,13 +285,13 @@ class ajax {
             }
             this.result = response;
             this.status = this.xhr.status;
-            if (fastjs_config["log"]["ajaxLog"]) {
+            if (FASTJS_CONFIG.log.ajaxLog) {
                 console.log("[Fastjs ajax] ajaxRequest to url %s is success".replace("%s", this.url))
             }
             if (this.callback && typeof this.callback == "function") {
                 this.callback(response, 200)
             } else {
-                if (fastjs_config["log"]["ajaxLog"]) {
+                if (FASTJS_CONFIG.log.ajaxLog) {
                     console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
                 }
                 if (this.callback && typeof this.callback == "function") {
@@ -277,18 +310,20 @@ class ajax {
         if (this.timeout == null) {
             this.timeout = 5000;
         } else if (typeof this.timeout == "number") {
-            if (100 < this.timeout && this.timeout <= 1000) {
-                fastjs.throwSmallError("[Fastjs] SmallError at ajax: this.timeout is a little bit small, it maybe will make a bad experience")
-            } else if (0 < this.timeout && this.timeout <= 100) {
-                fastjs.throwError("[Fastjs] Error at ajax: this.timeout is too small, it will make a bad experience!")
-            } else if (this.timeout === 0) {
-                fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: this.timeout is too small, it will let ajax can't run!")
-                this.timeout = 1;
+            if (FASTJS_CONFIG.error.ajax.checkTimeout) {
+                if (100 < this.timeout && this.timeout <= 1000) {
+                    fastjs.throwSmallError("[Fastjs] SmallError at ajax: this.timeout is a little bit small, it maybe will make a bad experience")
+                } else if (0 < this.timeout && this.timeout <= 100) {
+                    fastjs.throwError("[Fastjs] Error at ajax: this.timeout is too small, it will make a bad experience!")
+                } else if (this.timeout === 0) {
+                    fastjs.throwSeriousError("[Fastjs] SeriousError at ajax: this.timeout is too small, it will let ajax can't run!")
+                    this.timeout = 1;
+                }
             }
         }
 
         if (!this.url || this.url.length < 1) {
-            throw "[Fastjs] Fastjs.ajax.error: 9412E"
+            throw "[Fastjs] CrashError at ajax: Null data given"
         }
 
         if (this.url.search("https://") === -1) {
@@ -317,7 +352,7 @@ class ajax {
         this.xhr.timeout = this.timeout;
 
         this.xhr.sendTimeout = setTimeout(() => {
-            if (fastjs_config["log"]["ajaxLog"]) {
+            if (FASTJS_CONFIG.log.ajaxLog) {
                 console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
             }
             if (this.callback && typeof this.callback == "function") {
@@ -338,14 +373,14 @@ class ajax {
                 }
                 this.result = response;
                 this.status = this.xhr.status;
-                if (fastjs_config["log"]["ajaxLog"]) {
+                if (FASTJS_CONFIG.log.ajaxLog) {
                     console.log("[Fastjs ajax] ajaxRequest to url %s is success".replace("%s", this.url))
                 }
                 if (this.callback && typeof this.callback == "function") {
                     this.callback(response, 200)
                 }
             } else {
-                if (fastjs_config["log"]["ajaxLog"]) {
+                if (FASTJS_CONFIG.log.ajaxLog) {
                     console.log("[Fastjs ajax] ajaxRequest to url %s is failed".replace("%s", this.url))
                 }
                 if (this.callback && typeof this.callback == "function") {
@@ -369,6 +404,24 @@ class fastjs {
          * 2.Frame need this function to run normally,if you don't know how does it work,please DON'T edit it.
          */
         window.js = fastjs;
+        String.prototype.push = function ($strings) {
+            let str = this
+            if (typeof $strings === "string") {
+                str = str.replaceAll("%s%", $strings)
+            } else if (typeof $strings === "object") {
+                // str foreach
+                $strings.forEach((e, key) => {
+                    if (key >= $strings.length) {
+                        e = $strings[$strings.length - 1]
+                        if (FASTJS_CONFIG.error.other.outOfRange) {
+                            fastjs.throwSmallError("[Fastjs] Fastjs.String.setup: List out of range")
+                        }
+                    }
+                    str = str.replace("%s%", e)
+                })
+            }
+            return str;
+        }
         Element.prototype.attr = function ($name, $value) {
             return fastjs.attr($name, $value, this);
         }
@@ -408,6 +461,17 @@ class fastjs {
         Element.prototype.gettext = function () {
             return this.innerText;
         }
+        Element.prototype.next = function (selecter) {
+            return fastjs.dom(selecter, this)
+        }
+        Element.prototype.then = function (callback) {
+            if (callback === "string") {
+                eval(callback)
+            } else {
+                callback(this)
+            }
+            return this
+        }
         Array.prototype.add = function ($index, $key) {
             if (!$key && $key !== 0) {
                 this.push($index)
@@ -419,7 +483,7 @@ class fastjs {
                 }
             }
             this.splice($key, 0, $index)
-            return true;
+            return this;
         }
         Array.prototype.delete = function ($key, $num) {
             if (!$num) {
@@ -430,14 +494,16 @@ class fastjs {
                 $num = 1;
             }
             this.splice($key, $num)
-            return true;
+            return this;
         }
         Array.prototype.resort = function () {
-            this.sort()
-            this.reverse()
-            return true;
+            let arr = this
+            arr.sort()
+            arr.reverse()
+            return arr;
         }
         Array.prototype.sort()
+        // Fastjs Dom Selecter Setup
         window.$ = function dom($selecter) {
             return fastjs.dom($selecter);
         }
@@ -450,34 +516,34 @@ class fastjs {
                 return fastjs.createdom_carouselImg(imgUrl, width, height, changeTime, transitionTime, position_x, position_y);
             }
         }
-        if (fastjs_config["autoInstallCss"]) {
+        if (FASTJS_CONFIG.css.autoInstall) {
             var fastjs_css_install
             fastjs_css_install = this.createdom.html('link');
-            fastjs_css_install.href = 'https://fastjs.com.cn/download/v%s/fastjs-%s.css'.replaceAll("%s", fastjs_config["version"]);
+            fastjs_css_install.href = FASTJS_CONFIG.css.url === "default" ? 'https://fastjs.com.cn/download/v%s/fastjs-%s.css'.replaceAll("%s", FASTJS_CONFIG.version) : FASTJS_CONFIG.css.url
             fastjs_css_install.rel = 'stylesheet';
             fastjs_css_install.type = 'text/css';
             $("head").domAddEnd(fastjs_css_install);
         }
 
-        if (fastjs_config["log"]["fastjsInstallLog"]) {
-            console.log("Fastjs v%s already install successfully!".replaceAll("%s", fastjs_config["version"]));
+        if (FASTJS_CONFIG.log.fastjsInstallLog) {
+            console.log("Fastjs v%s already install successfully!".replaceAll("%s", FASTJS_CONFIG.version));
         }
     }
 
     static throwSmallError($text) {
-        if (fastjs_config["error"]["smallErrorOutput"]) {
+        if (FASTJS_CONFIG.error.output.smallErrorOutput) {
             console.warn($text);
         }
     }
 
     static throwError($text) {
-        if (fastjs_config["error"]["errorOutput"]) {
+        if (FASTJS_CONFIG.error.output.errorOutput) {
             console.warn($text);
         }
     }
 
     static throwSeriousError($text) {
-        if (fastjs_config["error"]["seriousErrorOutput"]) {
+        if (FASTJS_CONFIG.error.output.seriousErrorOutput) {
             console.error($text);
         }
     }
@@ -699,7 +765,7 @@ class fastjs {
         }, $dom.fastjs_transitionTime - 300)
     }
 
-    static dom($selecter) {
+    static dom($selecter, $element) {
         /*
          * What Can It Do?
          * This function can supersede "document.getElementBy...", let you get the dom elements faster
@@ -717,6 +783,10 @@ class fastjs {
          * exp: js.dom("body").innerHTML="Hello World!"
          * exp: $("body").innerHTML="Hello World!" [recommend]
          */
+
+        if (!$element) {
+            $element = document;
+        }
 
         let selecter = [];
         let string = [];
@@ -758,12 +828,12 @@ class fastjs {
         )
         let result = null
         selecter.forEach((e, key) => {
-            if (e.type === "tag") {
+            if (e.type === "tag" && e.index[0] === "?") {
                 e.index = e.index.slice(1);
             }
             if (key !== selecter.length - 1) {
                 if (!key) {
-                    result = document.querySelector(e.index)
+                    result = $element.querySelector(e.index)
                 } else {
                     result = result.querySelector(e.index)
                 }
@@ -772,13 +842,13 @@ class fastjs {
                     if (result) {
                         result = result.querySelector(e.index)
                     } else {
-                        result = document.querySelector(e.index)
+                        result = $element.querySelector(e.index)
                     }
                 } else {
                     if (result) {
                         result = result.querySelectorAll(e.index)
                     } else {
-                        result = document.querySelectorAll(e.index)
+                        result = $element.querySelectorAll(e.index)
                     }
                 }
             }
@@ -992,152 +1062,15 @@ class fastjs {
     }
 
 
+    // noinspection JSUnusedLocalSymbols
     static urlget(url, data, callback, datatype) {
-        /*
-        * How To Use?
-        *
-        * 1.urlget->url: The url you need to get,it will return error code 9359E if you give a null.
-        *           exp: "https://xiaodong.indouyin.cn/"
-        * 2.urlget->data: The data that you need to give to server,you can give null if you don't need.
-        *           exp: null
-        *           exp: [["username","abcde"],["password","12345"]]
-        * 3.urlget->callback: The javascript that when geturl successful,you can give null if you don't need.
-        *           exp: ()=>{alert();}
-        *           exp: function (){alert();}
-        *           exp: null
-        * 4.urlget->datatype: define that your server will giveback what type of data,if it will give back a json data,please use "json",or else,please use "text",if you give a null,or other text,it will return error code 9352E
-        *           exp: "text"
-        *           exp: "json"
-        *
-        * exp: callback = fastjs.urlget("https://xiaodong.indouyin.cn/login/submit.php", [["username", "abcde"],["password", "12345"]], ()=>{console.log("username="+window[callback]["username"])})
-        * exp: callback = fastjs.urlget("https://xiaodong.indouyin.cn/login/submit.php", [["username", "abcde"],["password", "12345"]], ($result)=>{console.log("username="+$result["username"])})
-        * exp: sendget = fastjs.urlget("https://xiaodong.indouyin.cn/login/submit.php", [["data1", "123"],["data2", "12345"]], ()=>{console.log("jsonData="+window[sendget])})
-        * exp: sendget = fastjs.urlget("https://xiaodong.indouyin.cn/login/submit.php", [["data1", "123"],["data2", "12345"]], ($result)=>{console.log("jsonData="+$result)})
-        */
-
-        if (url == null || url === "") {
-            throw "[Fastjs] Fastjs.geturl.error: 9359E"
-        }
-
-        if (url[url.length - 1] !== "/" && data) {
-            url = url + "/"
-        }
-
-        // noinspection JSCheckFunctionSignatures
-        if (data != null) {
-            let urldata = "?" + data[0][0] + "=" + data[0][1];
-            for (let i = 1; i <= data.length - 1; i++) {
-                urldata = urldata + "&" + data[i][0] + "=" + data[i][1];
-            }
-            url = url + urldata;
-        }
-
-        let sessionid = Math.ceil(Math.random() * (9999999999999999 - 1111111111111111 + 1) + 1111111111111111);
-        window["fastjs_urlget_sid#" + sessionid] = new XMLHttpRequest();
-
-        if (datatype === "text") {
-        } else if (datatype === "json") {
-            window["fastjs_urlget_sid#" + sessionid].responseType = 'json';
-        } else {
-            throw "[Fastjs] Fastjs.geturl.error: 9352E"
-        }
-
-        // sessionid->fastjs_urlget_sid->Math.random()*(9999999999999999-1111111111111111+1)+1111111111111111
-        window["fastjs_urlget_sid#" + sessionid].open('get', url);
-        // post && urlpost->url = url && true
-        window["fastjs_urlget_sid#" + sessionid].onload = function () {
-            window["fastjs_urlget_sid#" + sessionid] = window["fastjs_urlget_sid#" + sessionid].response;
-            if (fastjs_config["log"]["ajaxLog"]) {
-                console.log("Fastjs-%s urlget: You request ".replaceAll("%s", fastjs_config["version"]) + "fastjs_urlget_sid#" + sessionid + " is success!".replaceAll("%s", fastjs_config["version"]))
-            }
-            if (callback != null) {
-                callback(window["fastjs_urlget_sid#" + sessionid]);
-            }
-        }
-        try {
-            window["fastjs_urlget_sid#" + sessionid].send()
-        } catch (error) {
-            throw "[Fastjs] Fastjs.urlget.error: " + error
-        }
-        return "fastjs_urlget_sid#" + sessionid;
+        console.log("[Fastjs quality inspection] fastjs.urlget is not support after v1.0.11")
     }
 
+
+    // noinspection JSUnusedLocalSymbols
     static urlpost(url, data, callback, datatype) {
-        /*
-        * How To Use?
-        *
-        * 1.posturl->url: The url you need to post data,it will return error code 9373E if you give a null.
-        *           exp: "https://xiaodong.indouyin.cn/"
-        * 2.posturl->data: The data that you need to give to server,you can give null if you don't need.
-        *           exp: null
-        *           exp: [["username","abcde"],["password","12345"]]
-        * 3.posturl->callback: The javascript that when posturl successful,you can give null if you don't need.
-        *           exp: ()=>{alert();}
-        *           exp: function (){alert();}
-        *           exp: null
-        * 4.urlget->datatype: define that your server will giveback what type of data,if it will give back a json data,please use "json",or else,please use "text",if you give a null,or other text,it will return error code 9352E
-        *           exp: "text"
-        *           exp: "json"
-        *
-        * exp: callback = fastjs.urlpost("https://xiaodong.indouyin.cn/login/submit.php", [["username", "abcde"],["password", "12345"]], ()=>{console.log("username="+window[callback]["username"])})
-        * exp: callback = fastjs.urlpost("https://xiaodong.indouyin.cn/login/submit.php", [["username", "abcde"],["password", "12345"]], ($result)=>{console.log("username="+$result["username"])})
-        * exp: sendget = fastjs.urlpost("https://xiaodong.indouyin.cn/login/submit.php", [["data1", "123"],["data2", "12345"]], ()=>{console.log("jsonData="+window[sendget])})
-        * exp: sendget = fastjs.urlpost("https://xiaodong.indouyin.cn/login/submit.php", [["data1", "123"],["data2", "12345"]], ($result)=>{console.log("jsonData="+$result)})
-        */
-
-        let postdata = null;
-
-        if (url == null || url === "") {
-            throw "[Fastjs] Fastjs.posturl.error: 9373E"
-        }
-
-        if (url[url.length - 1] !== "/" && data) {
-            url = url + "/"
-        }
-
-        if (data != null) {
-            postdata = data[0][0] + "=" + data[0][1];
-            for (let i = 1; i <= data.length - 1; i++) {
-                postdata = postdata + "&" + data[i][0] + "=" + data[i][1];
-            }
-        }
-
-        // noinspection JSCheckFunctionSignatures
-        let sessionid = Math.ceil(Math.random() * (9999999999999999 - 1111111111111111 + 1) + 1111111111111111);
-        // sessionid->fastjs_urlget_sid->Math.random()*(9999999999999999-1111111111111111+1)+1111111111111111
-        window["fastjs_urlpost_sid#" + sessionid] = new XMLHttpRequest();
-
-        if (datatype === "text") {
-        } else if (datatype === "json") {
-            window["fastjs_urlpost_sid#" + sessionid].responseType = 'json';
-        } else {
-            throw "[Fastjs] Fastjs.posturl.error: 9356E"
-        }
-
-        window["fastjs_urlpost_sid#" + sessionid].open('post', url);
-        // post && urlpost->url = url && true
-        window["fastjs_urlpost_sid#" + sessionid].setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        window["fastjs_urlpost_sid#" + sessionid].onload = function () {
-            if (datatype === "text") {
-                window["fastjs_urlpost_sid#" + sessionid] = window["fastjs_urlpost_sid#" + sessionid].response;
-            } else {
-                if (window["fastjs_urlpost_sid#" + sessionid].response !== "") {
-                    window["fastjs_urlpost_sid#" + sessionid] = window["fastjs_urlpost_sid#" + sessionid].response;
-                }
-            }
-            if (fastjs_config["log"]["ajaxLog"]) {
-                console.log("Fastjs-%s urlpost: You request ".replaceAll("%s", fastjs_config["version"]) + "fastjs_urlpost_sid#" + sessionid + " is success!")
-            }
-            if (callback != null) {
-                callback(window["fastjs_urlget_sid#" + sessionid]);
-            }
-        }
-        try {
-            window["fastjs_urlpost_sid#" + sessionid].send(postdata)
-        } catch (error) {
-            throw "[Fastjs] Fastjs.posturl.error: " + error
-        }
-        return "fastjs_urlpost_sid#" + sessionid;
+        console.log("[Fastjs quality inspection] fastjs.urlpost is not support after v1.0.11")
     }
 
     static copy(data) {
@@ -1150,7 +1083,7 @@ class fastjs {
         * 1.This function maybe will refuse by browser if it is not trigger by user's mouse/keyboard event.
         *
         * exp: <a href="javascript:void(0);" onclick="fastjs.copy('12345')">Click to copy</a>
-            * exp: <a href="javascript:fastjs.copy('abcde')">Click to copy</a>
+        * exp: <a href="javascript:fastjs.copy('abcde')">Click to copy</a>
         */
 
         var oInput = document.createElement('input');
@@ -1396,6 +1329,11 @@ class fastjs {
         }
         // noinspection JSUnresolvedFunction
         document.cookie = name + "=" + value + ";expires=" + d.toGMTString() + ";path=/;" + domain;
+    }
+
+    static reload() {
+        console.log("[Fastjs quality inspection] fastjs.reload is only recommend for developer test")
+        fastjs.setup()
     }
 }
 

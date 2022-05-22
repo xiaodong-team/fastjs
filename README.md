@@ -1,16 +1,18 @@
 # Fastjs
 
+[![star](https://gitee.com/dy-xiaodong/fastjs/badge/star.svg?theme=dark)](https://gitee.com/dy-xiaodong/fastjs/stargazers) <br />
+![star](https://camo.githubusercontent.com/9cd15767dc45dd1a09a15c0751f65623b4040bc28f13875a3803250e3d95e167/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f7675652e7376673f73616e6974697a653d74727565)
+
 #### 介绍
 
-Fastjs是一个非常适合快速开发的框架，无论是ajax请求，dom操作等，fastjs都可以发挥他的作用，
-令开发变得不再艰难，且Fastjs内集成了丰富的函数库，可以让你进行快速开发，
-Fastjs还包含了丰富的html组件库和模板，让你省去频繁的构思与操作
+Fastjs是一个集成各种js操作於一个文件的快速开发的框架，无论是ajax请求，dom操作等，fastjs都可以多方面帮助你进行快速开发，
+令开发变得不再艰难
 
 #### 架构
 
-纯原生javascript制成，无任何依赖，可独立完成项目开发
+使用ES6，可能对过低版本的IE不兼容，无依赖库，框架，可独立完成项目开发
 
-#### 如何安装
+#### 本地部署
 
 1. npm下载
 
@@ -37,10 +39,12 @@ git clone "https://gitee.com/dy-xiaodong/fastjs.git"
 
 #### 参与贡献
 
-邮箱建议: xiaodong@indouyin.cn <br />
-官网提交: https://fastjs.com.cn/
+非常欢迎各位开发者来参与到我们的项目开发中，共同维护国内开源环境，无论是Issue，pull request(pr)，我们都会进行审核并可能
+根据建议对框架内容进行改动，同时我们更鼓励开发者对项目进行本地Fork后共同编辑，我们也会对各位开发者pull request中的改动
+进行查看，如可合并，我们会在第一时间与主分支进行合并
 
 ### 关于我们
 作者名: DY_XiaoDong <br />
 开源协议: MIT License <br />
-项目官网: https://fastjs.com.cn/
+项目官网: https://fastjs.com.cn/ <br />
+版本号: v1.0.11
