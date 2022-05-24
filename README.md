@@ -3,6 +3,10 @@
 [![star](https://gitee.com/dy-xiaodong/fastjs/badge/star.svg?theme=dark)](https://gitee.com/dy-xiaodong/fastjs/stargazers) <br />
 ![star](https://camo.githubusercontent.com/9cd15767dc45dd1a09a15c0751f65623b4040bc28f13875a3803250e3d95e167/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f7675652e7376673f73616e6974697a653d74727565)
 
+### 公告
+
+**Fastjs官方网站fastjs.com.cn正在进行备案，因此暂时无法访问，请留意gitee与github的最新消息**
+
 #### 介绍
 
 Fastjs是一个集成各种js操作於一个文件的快速开发的框架，无论是ajax请求，dom操作等，fastjs都可以多方面帮助你进行快速开发，
