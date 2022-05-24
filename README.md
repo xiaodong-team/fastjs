@@ -5,7 +5,7 @@
 
 ### 公告
 
-**Fastjs官方网站fastjs.com.cn正在进行备案，因此暂时无法访问，请留意gitee与github的最新消息**
+**Fastjs官方网站fastjs.com.cn正在进行备案，官网暂时迁移至 http://8.218.68.209:3140/ ，请留意gitee与github的最新消息**
 
 #### 介绍
 
