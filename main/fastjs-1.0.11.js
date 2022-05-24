@@ -419,6 +419,8 @@ class fastjs {
                     }
                     str = str.replace("%s%", e)
                 })
+            } else if (typeof $strings === "number") {
+                str = str.replaceAll("%s%", String($strings))
             }
             return str;
         }
