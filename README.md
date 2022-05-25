@@ -1,6 +1,6 @@
 # Fastjs
 
-[![](https://img.shields.io/badge/dynamic/json?color=red&label=Gitee&query=stargazers_count&suffix=%20Stars&url=https%3A%2F%2Fgitee.com%2Fapi%2Fv5%2Frepos%2Fdy-xiaodong%2Ffastjs)](https://gitee.com/dy-xiaodong/fastjs/stargazers)
+[![](https://fastjs.xiaodong.indouyin.cn/icon/)](https://gitee.com/dy-xiaodong/fastjs/stargazers)
 ![](https://img.shields.io/badge/license-MIT-purple)
 ![](https://img.shields.io/badge/Gitee-dy--xiaodong-green)
 ![](https://img.shields.io/badge/npm-v1.0.11-blue)
