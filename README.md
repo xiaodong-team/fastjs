@@ -1,11 +1,18 @@
 # Fastjs
 
-[![star](https://gitee.com/dy-xiaodong/fastjs/badge/star.svg?theme=dark)](https://gitee.com/dy-xiaodong/fastjs/stargazers) <br />
-![star](https://camo.githubusercontent.com/9cd15767dc45dd1a09a15c0751f65623b4040bc28f13875a3803250e3d95e167/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f7675652e7376673f73616e6974697a653d74727565)
+[![star](https://gitee.com/dy-xiaodong/fastjs/badge/star.svg?theme=dark)](https://gitee.com/dy-xiaodong/fastjs/stargazers)
+![](https://img.shields.io/badge/license-MIT-purple)
+![](https://img.shields.io/badge/Gitee-dy--xiaodong-green)
+![](https://img.shields.io/badge/npm-v1.0.11-blue)
+![](https://img.shields.io/badge/download-<10/month-%23697ec6)
+![](https://img.shields.io/badge/unsupport-jquery-%23c71d23)
+![](https://img.shields.io/badge/support-vue2-success)
+![](https://img.shields.io/badge/support-vue3-success)
+![](https://img.shields.io/badge/support-react-success)
 
 ### 公告
 
-**Fastjs官方网站fastjs.com.cn正在进行备案，官网暂时迁移至 http://8.218.68.209:3140/ ，请留意gitee与github的最新消息**
+**Fastjs官方网站fastjs.com.cn正在进行备案，官网暂时迁移至 https://fastjs.xiaodong.indouyin.cn/ ，请留意gitee与github的最新消息**
 
 #### 介绍
 
