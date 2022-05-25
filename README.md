@@ -1,6 +1,6 @@
 # Fastjs
 
-[![star](https://gitee.com/dy-xiaodong/fastjs/badge/star.svg?theme=dark)](https://gitee.com/dy-xiaodong/fastjs/stargazers)
+[![star](https://fastjs.xiaodong.indouyin.cn/icon.php)](https://gitee.com/dy-xiaodong/fastjs/stargazers)
 ![](https://img.shields.io/badge/license-MIT-purple)
 ![](https://img.shields.io/badge/Gitee-dy--xiaodong-green)
 ![](https://img.shields.io/badge/npm-v1.0.11-blue)
