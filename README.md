@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/license-MIT-purple)
 ![](https://img.shields.io/badge/Gitee-dy--xiaodong-green)
 ![](https://img.shields.io/badge/npm-v1.0.11-blue)
-![](https://img.shields.io/badge/download-<10/month-%23697ec6)
+![](https://img.shields.io/badge/download-10+/month-%23697ec6)
 ![](https://img.shields.io/badge/unsupport-jquery-%23c71d23)
 ![](https://img.shields.io/badge/support-vue2-success)
 ![](https://img.shields.io/badge/support-vue3-success)
